@@ -6,5 +6,6 @@ import Admin from './Admin';
 import NewDrama from './NewDrama';
 import ViewErrors from './ViewErrors';
 import ReportError from './ReportError';
+import Result from './Result';
 
-export { App, Home, Login, Register, Admin, NewDrama, ViewErrors, ReportError };
+export { App, Home, Login, Register, Admin, NewDrama, ViewErrors, ReportError, Result };

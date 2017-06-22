@@ -10,6 +10,10 @@ const initialState = {
     status: 'INIT',
     data: [],
     error: -1
+  },
+  remove: {
+    status: 'INIT',
+    error: -1
   }
 }
 
@@ -57,6 +61,30 @@ export default function errors(state, action) {
     case types.ERROR_LIST_FAILURE:
       return update(state, {
         list: {
+          status: { $set: 'FAILURE' },
+          error: { $set: action.error }
+        }
+      });
+    /* ERROR REPORT REMOVE */
+    case types.ERROR_REMOVE:
+      return update(state, {
+        remove: {
+          status: { $set: 'WAITING' },
+          error: { $set: -1 }
+        }
+      });
+    case types.ERROR_REMOVE_SUCCESS:
+      return update(state, {
+        remove: {
+          status: { $set: 'SUCCESS' }
+        },
+        list: {
+          data: { $splice: [[action.index, 1]] }
+        }
+      });
+    case types.ERROR_REMOVE_FAILURE:
+      return update(state, {
+        remove: {
           status: { $set: 'FAILURE' },
           error: { $set: action.error }
         }

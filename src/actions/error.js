@@ -4,7 +4,10 @@ import {
   ERROR_ADD_FAILURE,
   ERROR_LIST,
   ERROR_LIST_SUCCESS,
-  ERROR_LIST_FAILURE
+  ERROR_LIST_FAILURE,
+  ERROR_REMOVE,
+  ERROR_REMOVE_SUCCESS,
+  ERROR_REMOVE_FAILURE
 } from './ActionTypes';
 
 import axios from 'axios';
@@ -84,4 +87,38 @@ export function errorListFailure(error) {
     type: ERROR_LIST_FAILURE,
     error
   };
+}
+
+/* ERROR REPORT REMOVE */
+export function errorRemoveRequest(id, index) {
+  return (dispatch) => {
+    dispatch(errorRemove());
+
+    return axios.delete('/api/error/' + id)
+    .then((response) => {
+      dispatch(errorRemoveSuccess(index));
+    }).catch((error) => {
+      dispatch(errorRemoveFailure(error.response.data.code));
+    })
+  }
+}
+
+export function errorRemove() {
+  return {
+    type: ERROR_REMOVE
+  };
+}
+
+export function errorRemoveSuccess(index) {
+  return {
+    type: ERROR_REMOVE_SUCCESS,
+    index
+  };
+}
+
+export function errorRemoveFailure(error) {
+  return {
+    type: ERROR_REMOVE_FAILURE,
+    error
+  }
 }

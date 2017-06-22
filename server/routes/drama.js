@@ -183,4 +183,63 @@ router.get('/:listType/:id', (req, res) => {
   }
 });
 
+/*
+  READ DRAMA OF A DIRECTOR: GET /api/drama/:director
+*/
+router.get('/:director', (req, res) => {
+  Drama.find({director: req.params.director})
+  .sort({'_id': -1})
+  .limit(6)
+  .exec((err, dramas) => {
+    if(err) throw err;
+    res.json(dramas);
+  })
+});
+
+/*
+  READ ADDITIONAL (OLD/NEW) DRAMA OF A USER: GET /api/drama/:director/:listType/:id
+*/
+router.get('/:era/:listType/:id', (req, res) => {
+  let listType = req.params.listType;
+  let id = req.params.id;
+
+  // CHECK LIST TYPE VALIDITY
+  if(listType !== 'old' && listType !== 'new') {
+    return res.status(400).json({
+      error: "INVALID LISTTYPE",
+      code: 1
+    });
+  }
+
+  // CHECK DRAMA ID VALIDITY
+  if(mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      error: "INVALID ID",
+      code: 2
+    });
+  }
+
+  let objId = new mongoose.Types.ObjectId(req.params.id);
+
+  if(listType === 'new') {
+    // GET NEWER DRAMA
+    Drama.find({era: req.params.era, id: { $gt: objId }})
+    .sort({_id: -1})
+    .limit(6)
+    .exec((err, dramas) => {
+      if(err) throw err;
+      return res.json(dramas);
+    });
+  } else {
+    // GET OLDER DRAMA
+    Drama.find({era: req.params.era, id: {$lt: objId }})
+    .sort({_id: -1})
+    .limit(6)
+    .exec((err, dramas) => {
+      if(err) throw err;
+      return res.json(dramas);
+    });
+  }
+});
+
 export default router;

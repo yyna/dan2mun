@@ -12,8 +12,9 @@ class Home extends React.Component {
     this.loadOldDrama = this.loadOldDrama.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.state = {
-      loadingState: false
-    }
+      loadingState: false,
+      initiallyLoaded: false
+    };
   }
 
   componentDidMount() {
@@ -25,10 +26,16 @@ class Home extends React.Component {
         }
       );
     };
-    this.props.dramaListRequest(true).then(
+    // DO THE INITIAL LOADING
+    this.props.dramaListRequest(true, undefined, undefined, this.props.era).then(
       () => {
+        // LOAD DRAMA UNTIL SCROLLABLE
+        // setTimeout(loadUntilScrollable, 1000);
         // BEGIN NEW DRAMA LOADING loadDramaLoop
         loadDramaLoop();
+        this.setState({
+          initiallyLoaded: true
+        })
       }
     );
     $(window).scroll(() => {
@@ -56,6 +63,10 @@ class Home extends React.Component {
 
     // REMOVE WINDOWS SCROLL LISTENER
     $(window).unbind();
+
+    this.setState({
+      initiallyLoaded: false
+    })
   }
 
   loadNewDrama() {
@@ -67,9 +78,9 @@ class Home extends React.Component {
 
     // IF PAGE IS EMPTY, DO THE INITIAL LOADING
     if(this.props.dramaData.length === 0 )
-      return this.props.dramaListRequest(true);
+      return this.props.dramaListRequest(true, undefined, undefined, this.props.era);
 
-    return this.props.dramaListRequest(false, 'new', this.props.dramaData[0]._id);
+    return this.props.dramaListRequest(false, 'new', this.props.dramaData[0]._id, this.props.era);
   }
 
   loadOldDrama() {
@@ -86,7 +97,7 @@ class Home extends React.Component {
     let lastId = this.props.dramaData[this.props.dramaData.length - 1]._id;
 
     // START REQUEST
-    return this.props.dramaListRequest(false, 'old', lastId).then(() => {
+    return this.props.dramaListRequest(false, 'old', lastId, this.props.era).then(() => {
       // IF IT IS LAST PAGE, NOTIFY
       if(this.props.isLast) {
         Materialize.toast('You are reading the last page', 2000);
@@ -132,14 +143,53 @@ class Home extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(this.props.era !== prevProps.era) {
+      this.componentWillUnmount();
+      this.componentDidMount();
+    }
+  }
+
   render() {
+
+    const emptyView = (
+      <div className="container">
+        <div className="empty-page">
+          <b>{this.props.era}</b>를 배경으로 한 영화나 드라마는 없습니다.<br/>
+        </div>
+      </div>
+    );
+
+    const wallHeader = (
+      <div>
+        <div className="container wall-info">
+          <div className="card wall-info blue lighten-2 white-text">
+            <div className="card-content">
+              {this.props.era}
+            </div>
+          </div>
+        </div>
+        { this.props.dramaData.length === 0 && this.state.initiallyLoaded ? emptyView : undefined }
+      </div>
+    );
+
+
     return (
       <div className="wrapper">
+        { typeof this.props.era !== "undefined" ? wallHeader : undefined }
         <DramaList data={this.props.dramaData} currentUser={this.props.currentUser} onRemove={this.handleRemove}/>
       </div>
     );
   }
 }
+
+Home.PropTypes = {
+  era: React.PropTypes.string
+};
+
+Home.defaultProps = {
+  era: undefined
+};
 
 const mapStateToProps = (state) => {
   return {

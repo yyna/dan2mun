@@ -19,6 +19,10 @@ span#subtitle {
   padding-left: 10px;
 }
 
+span.select {
+  width: 100px;
+}
+
 /* Authentication */
 .auth {
   margin-top: 50px;
@@ -121,7 +125,7 @@ textarea#error {
 
 /* Author */
 .author {
-  margin-top: 50px;
+  /*margin-top: 50px;*/
   font-size: 10px;
 }
 
@@ -212,4 +216,54 @@ img.poster{
 
 td {
   padding: 1px;
+}
+
+/* ANIMATION */
+@-webkit-keyframes memo-leave {
+    0% {
+      opacity: 1;
+      max-height: 1080px;
+    }
+    50% {
+      opacity: 0;
+       -webkit-transform: translateX(100px);
+    }
+    100% {
+        max-height: 0px;
+    }
+}
+
+@keyframes memo-leave {
+    0% {
+      opacity: 1;
+      max-height: 1080px;
+    }
+    50% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    100% {
+        max-height: 0px;
+    }
+}
+
+.memo-leave {
+    max-height: 0px;
+    opacity: 0;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-name: memo-leave;
+    animation-name: memo-leave;
+}
+
+/* RESULT */
+.empty-page {
+    font-size: 30px;
+    text-align: center;
+    color: #4D4D4D;
+}
+
+.wall-info {
+    font-size: 30px;
+    text-align: center;
 }

@@ -6,7 +6,7 @@ class Admin extends React.Component {
     return (
       <div className="container">
         <div className="center">
-          <br/><br/><div><h5>관리자 기능 :-)</h5></div>
+          <div><h5>관리자 기능 :-)</h5></div>
         </div>
         <div>
           <div className="center">

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 // Container Components
-import { App, Home, Login, Register, Admin, ViewErrors, NewDrama, ReportError } from 'containers';
+import { App, Home, Login, Register, Admin, ViewErrors, NewDrama, ReportError, Result } from 'containers';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -28,6 +28,7 @@ ReactDOM.render(
           <Route path="newdrama" component={NewDrama}/>
           <Route path="viewerrors" component={ViewErrors}/>
           <Route path="reporterror" component={ReportError}/>
+          <Route path="result/:era" component={Result}/>
       </Route>
     </Router>
   </Provider>, rootElement

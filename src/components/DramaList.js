@@ -1,20 +1,28 @@
 import React from 'react';
 import { Drama } from 'components';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 class DramaList extends React.Component {
   render() {
     const mapToComponents = data => {
       return data.map((drama, i) => {
-        return (<Drama
-          data={drama}
-          key={drama._id}
-          onRemove={this.props.onRemove}
-          />);
+        return (
+          <Drama
+            data={drama}
+            key={drama._id}
+            onRemove={this.props.onRemove}
+            index={i}
+          />
+        );
       })
     }
     return (
       <div>
-        {mapToComponents(this.props.data)}
+        <ReactCSSTransitionGroup transitionName="memo"
+          transitionEnterTimeout={2000}
+          transitionLeaveTimeout={1000}>
+          {mapToComponents(this.props.data)}
+        </ReactCSSTransitionGroup>
       </div>
     );
   }
@@ -30,7 +38,7 @@ DramaList.defaultProps = {
   data: [],
   currentUser: '',
   onRemove: (id, index) => {
-    console.log('remove function nont defined');
+    console.log('remove function not defined');
   }
 };
 

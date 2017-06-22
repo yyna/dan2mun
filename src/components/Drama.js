@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getStatusRequest, logoutRequest } from 'actions/authentication';
+import { Link } from 'react-router';
 
 class Drama extends React.Component {
 
@@ -67,25 +68,17 @@ class Drama extends React.Component {
         <div className="card-content">
           <table className="drama-table">
             <tbody>
-              <tr><td rowSpan="6" className="image-cell"><img src={data.image} className="poster"/></td><td className="table-label">감독</td><td><a>{data.director}</a></td></tr>
-              <tr><td className="table-label">출연진</td><td id={data._id}>{data.actors.join(", ")}</td></tr>
-              <tr><td className="table-label">장르</td><td><a>{data.genre}</a></td></tr>
-              <tr><td className="table-label">시대</td><td><a>{data.era}</a></td></tr>
-              <tr><td className="table-label">통치자</td><td><a>{data.king}</a></td></tr>
-              <tr><td className="table-label">관련 사건</td><td><a>{data.events}</a></td></tr>
+              <tr><td rowSpan="6" className="image-cell"><img src={data.image} className="poster"/></td><td className="table-label">감독</td><td>{data.director}</td></tr>
+              <tr><td className="table-label">출연진</td><td id={data._id}>{data.actors}</td></tr>
+              <tr><td className="table-label">장르</td><td>{data.genre}</td></tr>
+              <tr><td className="table-label">시대</td><td><Link to={`/result/${data.era}`}>{data.era}</Link></td></tr>
+              <tr><td className="table-label">통치자</td><td>{data.king}</td></tr>
+              <tr><td className="table-label">관련 사건</td><td>{data.events}</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     );
-
-    const actors = (actor, id) => {
-      console.log(actor);
-      for (var i=0; i<actor.length; i++) {
-        var obj = actor[i];
-        $("#"+id).append("<a>"+obj['이름']+"</a>, ");
-      }
-    }
 
     return(
       <div className="container memo">

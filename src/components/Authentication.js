@@ -101,16 +101,6 @@ class Authentication extends React.Component {
             </div>
           </div>
         </div>
-        <div>
-          <div className="card-content footer">
-            <div className="center" >
-            <span>소셜계정으로 로그인하기</span><br/>
-            <a className="waves-effect waves-light red-text">Google</a><span> </span>
-            <a className="waves-effect waves-light blue-text">Facebook</a><span> </span>
-            <a className="waves-effect waves-light amber-text">KakaoTalk</a>
-            </div>
-          </div>
-        </div>
       </div>
     );
 

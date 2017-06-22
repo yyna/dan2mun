@@ -58,7 +58,7 @@ export function dramaAddFailure(error) {
     - id:         OPTIONAL; drama id (one at the bottom or one at the top)
     - title:      OPTIONAL; find dramas of following title
 */
-export function dramaListRequest(isInitial, listType, id, username) {
+export function dramaListRequest(isInitial, listType, id, era) {
   return (dispatch) => {
     // inform drama list API is starting
     dispatch(dramaList());
@@ -71,7 +71,7 @@ export function dramaListRequest(isInitial, listType, id, username) {
       // or url + '/' + listType + '/' +  id
     } else {
       // load drama of specific user
-      /* to be implemented */
+      url = isInitial ? `${url}/${era}` : `${url}/${era}/${listType}/${id}`;
     }
 
     return axios.get(url)

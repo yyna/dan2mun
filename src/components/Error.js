@@ -4,6 +4,13 @@ class Error extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleRemove = this.handleRemove.bind(this);
+  }
+
+  handleRemove() {
+    let id = this.props.data._id;
+    let index = this.props.index;
+    this.props.onRemove(id, index);
   }
 
   render() {
@@ -17,7 +24,7 @@ class Error extends React.Component {
           <i className="material-icons icon-button">more_vert</i>
         </a>
         <ul id={`dropdown-${data._id}`} className='dropdown-content'>
-          <li><a>Remove</a></li>
+          <li><a onClick={this.handleRemove}>삭제</a></li>
         </ul>
       </div>
     );
@@ -25,7 +32,7 @@ class Error extends React.Component {
     const errorView = (
       <div className="card">
         <div className="info">
-          <div className="username">{data.username}</div>
+          <a className="username">{data.username}</a>
           { dropDownMenu }
         </div>
         <div className="card-content">
@@ -36,7 +43,7 @@ class Error extends React.Component {
 
     return (
       <div className="container memo">
-        {errorView}
+        { errorView }
       </div>
     );
   }
