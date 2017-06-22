@@ -65,7 +65,6 @@ class App extends React.Component {
           isAdmin: false,
           username: ''
         }
-
         document.cookie = 'key=' + btoa(JSON.stringify(loginData));
       }
     );

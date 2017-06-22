@@ -8,7 +8,13 @@ class NewDrama extends React.Component {
     super(props);
     this.state = {
       title: "",
-      director: ""
+      director: "",
+      actors: "",
+      genre: "",
+      era: "",
+      king: "",
+      events: "",
+      image: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
@@ -22,12 +28,12 @@ class NewDrama extends React.Component {
 
   /* ADD DRAMA */
   handleAdd() {
-    return this.props.dramaAddRequest(this.state.title, this.state.director).then(
+    return this.props.dramaAddRequest(this.state.title, this.state.director, this.state.actors, this.state.genre, this.state.era, this.state.king, this.state.events, this.state.image).then(
       () => {
-        console.log(this.props);
-        if (this.props.status === "SUCCESS") {
+        if (this.props.addStatus === "SUCCESS") {
           // TRIGGER LOAD NEW DRAMA
           // TO BE IMPLEMENTED
+          $('input[type=text]').val('');
           Materialize.toast('Success!', 2000);
         } else {
           /*
@@ -45,6 +51,10 @@ class NewDrama extends React.Component {
               break;
             case 2:
               $toastContent = $('<span style="color: #FFB4BA">Please write something</span>');
+              Materialize.toast($toastContent, 2000);
+              break;
+            case 3:
+              $toastContent = $('<span style="color: #FFB4BA">Plase login as Admin</span>');
               Materialize.toast($toastContent, 2000);
               break;
             default:
@@ -65,6 +75,12 @@ class NewDrama extends React.Component {
             <div className="card-content">
               <input type="text" placeholder="제목" name="title" onChange={this.handleChange}/>
               <input type="text" placeholder="감독" name="director" onChange={this.handleChange}/>
+              <input type="text" placeholder="배우1, 배우2" name="actors" onChange={this.handleChange}/>
+              <input type="text" placeholder="장르" name="genre" onChange={this.handleChange}/>
+              <input type="text" placeholder="시대" name="era" onChange={this.handleChange}/>
+              <input type="text" placeholder="통치자" name="king" onChange={this.handleChange}/>
+              <input type="text" placeholder="관련사건" name="events" onChange={this.handleChange}/>
+              <input type="text" placeholder="이미지" name="image" onChange={this.handleChange}/>
             </div>
             <div className="card-action">
               <a className="waves-effect waves-light btn" onClick={this.handleAdd}>추가하기</a>
@@ -76,28 +92,28 @@ class NewDrama extends React.Component {
   }
 }
 
-NewDrama.propTypes = {
-  title: React.PropTypes.string,
-  director: React.PropTypes.string,
-  onAdd: React.PropTypes.func
-}
-
-NewDrama.defaultProps = {
-  title: '',
-  director: '',
-  onAdd: (title, director) => { console.error("add drama function not defined"); }
-}
+// NewDrama.propTypes = {
+//   title: React.PropTypes.string,
+//   director: React.PropTypes.string,
+//   onAdd: React.PropTypes.func
+// }
+//
+// NewDrama.defaultProps = {
+//   title: '',
+//   director: '',
+//   onAdd: (title, director) => { console.error("add drama function not defined"); }
+// }
 
 const mapStateToProps = (state) => {
   return {
-    addStatus: state.drama.add
+    addStatus: state.drama.add.status
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dramaAddRequest: (title, director) => {
-      return dispatch(dramaAddRequest(title, director));
+    dramaAddRequest: (title, director, actors, genre, era, king, events, image) => {
+      return dispatch(dramaAddRequest(title, director, actors, genre, era, king, events, image));
     }
   };
 }

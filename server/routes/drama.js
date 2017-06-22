@@ -12,7 +12,8 @@ const router = express.Router();
         1: NOT LOGGED IN
         2: EMPTY CONTENTS
 */
-router.post('/add', (req, res) => {
+router.post('/', (req, res) => {
+
     // CHECK LOGIN STATUS
     if(typeof req.session.loginInfo === 'undefined') {
       return res.status(403).json({
@@ -29,23 +30,27 @@ router.post('/add', (req, res) => {
       });
     }
 
-    if(req.body.director === "") {
-      return res.status(400).json({
-        error: "EMPTY CONTENTS",
-        code: 2
+    // CHECK ADMIN
+    if(req.session.loginInfo.username !== 'admin') {
+      return res.status(403).json({
+        error: "NOT ADMIN",
+        code: 3
       });
     }
+
+
+    var actor = req.body.actors.replace(" ", "");
 
     // CREATE NEW DRAMA
     let drama = new Drama({
       title: req.body.title,
       director: req.body.director,
-      actors: req.body.actors,
+      actors: actor,
       genre: req.body.genre,
       era: req.body.era,
-      from: req.body.from,
-      to: req.body.to,
-      events: req.body.events
+      king: req.body.king,
+      events: req.body.events,
+      image: req.body.image
     });
 
     // SAVE IN DATABASE
@@ -130,6 +135,52 @@ router.get('/', (req, res) => {
     if(err) throw err;
     res.json(dramas);
   });
+});
+
+/*
+    READ ADDITIONAL (OLD/NEW) drama: GET /api/drama/:listType/:id
+*/
+router.get('/:listType/:id', (req, res) => {
+  let listType = req.params.listType;
+  let id = req.params.id;
+
+  // CHECK LIST TYPE VALIDITY
+  if(listType !== 'old' && listType !== 'new') {
+    return res.status(400).json({
+      error: "INVALID LISTTYPE",
+      code: 1
+    });
+  }
+
+  // CHECK DRAMA ID VALIDITY
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      error: "INVALID ID",
+      code: 2
+    });
+  }
+
+  let objId = new mongoose.Types.ObjectId(req.params.id);
+
+  if(listType === 'new') {
+  // GET NEWER DRAMA
+    Drama.find({ _id: { $gt: objId }})
+    .sort({_id: -1})
+    .limit(6)
+    .exec((err, dramas) => {
+      if(err) throw err;
+      return res.json(dramas);
+    });
+  } else {
+  // GET OLDER DRAMA
+  Drama.find({ _id: { $lt: objId }})
+    .sort({_id: -1})
+    .limit(6)
+    .exec((err, dramas) => {
+      if(err) throw err;
+      return res.json(dramas);
+    });
+  }
 });
 
 export default router;

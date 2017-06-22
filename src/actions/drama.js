@@ -14,12 +14,12 @@ import axios from 'axios';
 ==============================================================================*/
 
 /* DRAMA ADD */
-export function dramaAddRequest(title, director) {
+export function dramaAddRequest(title, director, actors, genre, era, king, events, image) {
   return (dispatch) => {
     // inform drama api is starting
     dispatch(dramaAdd());
 
-    return axios.post('/api/drama/add', {title, director})
+    return axios.post('/api/drama/', {title, director, actors, genre, era, king, events, image})
     .then((response) => {
       dispatch(dramaAddSuccess());
     }).catch((error) => {
@@ -55,15 +55,21 @@ export function dramaAddFailure(error) {
     - id:         OPTIONAL; drama id (one at the bottom or one at the top)
     - title:      OPTIONAL; find dramas of following title
 */
-export function dramaListRequest(isInitial, listType, id, title) {
+export function dramaListRequest(isInitial, listType, id, username) {
   return (dispatch) => {
     // inform drama list API is starting
     dispatch(dramaList());
 
     let url = '/api/drama';
 
-    /* url setup depending on parameters,
-      to  be implemented.. */
+    if(typeof username==="undefined") {
+      // username not given, load public drama
+      url = isInitial ? url : `${url}/${listType}/${id}`;
+      // or url + '/' + listType + '/' +  id
+    } else {
+      // load drama of specific user
+      /* to be implemented */
+    }
 
     return axios.get(url)
     .then((response) => {

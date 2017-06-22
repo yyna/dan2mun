@@ -5,14 +5,12 @@ const Schema = mongoose.Schema;
 const Drama = new Schema({
   title: String,
   director: String,
-  actors: [{
-    role: String,
-    actor: String
-  }],
+  actors: Array,
   genre: String,
   era: String,
   king: String,
-  events: [String]
+  events: String,
+  image: String
 });
 
 export default mongoose.model('drama', Drama);

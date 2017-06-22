@@ -38,10 +38,6 @@ class Drama extends React.Component {
   render() {
     const {data} = this.props;
 
-    const actors = (s) => {
-      console.log(JSON.stringify(s));
-    }
-
     const dropDownMenu = (
       <div className="option-button">
         <a className='dropdown-button'
@@ -50,8 +46,7 @@ class Drama extends React.Component {
           <i className="material-icons icon-button">more_vert</i>
         </a>
         <ul id={`dropdown-${data._id}`} className='dropdown-content'>
-          <li><a>Edit</a></li>
-          <li><a>Remove</a></li>
+          <li><a>삭제</a></li>
         </ul>
       </div>
     );
@@ -66,7 +61,7 @@ class Drama extends React.Component {
           <table className="drama-table">
             <tbody>
               <tr><td rowSpan="6" className="image-cell"><img src={data.image} className="poster"/></td><td className="table-label">감독</td><td><a>{data.director}</a></td></tr>
-              <tr><td className="table-label">출연진</td><td>{data.actors.join(", ")}</td></tr>
+              <tr><td className="table-label">출연진</td><td id={data._id}>{data.actors.join(", ")}</td></tr>
               <tr><td className="table-label">장르</td><td><a>{data.genre}</a></td></tr>
               <tr><td className="table-label">시대</td><td><a>{data.era}</a></td></tr>
               <tr><td className="table-label">통치자</td><td><a>{data.king}</a></td></tr>
@@ -77,7 +72,13 @@ class Drama extends React.Component {
       </div>
     );
 
-    {actors(data)};
+    const actors = (actor, id) => {
+      console.log(actor);
+      for (var i=0; i<actor.length; i++) {
+        var obj = actor[i];
+        $("#"+id).append("<a>"+obj['이름']+"</a>, ");
+      }
+    }
 
     return(
       <div className="container memo">
@@ -97,7 +98,7 @@ Drama.defaultProps = {
     _id: 'id1234567890',
     title: '제목',
     director: '감독',
-    actors: '출연진',
+    actors: [{'이름':'배우'}],
     genre: '장르',
     era: '시대',
     king: '통치자',

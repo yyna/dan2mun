@@ -1,17 +1,60 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getStatusRequest, logoutRequest } from 'actions/authentication';
+import { errorAddRequest } from 'actions/error';
 
 class ReportError extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      contents: ''
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({
+      contents: e.target.value
+    });
+  }
+
+  handleAdd() {
+    return this.props.errorAddRequest(this.state.contents).then(
+      () => {
+        if(this.props.addStatus.status === 'SUCCESS') {
+          // trigger load new error
+          Materialize.toast("오류가 신고되었습니다.", 2000);
+          this.setState({
+              contents: ""
+          });
+        } else {
+          let $toastContent;
+          switch(this.props.addStatus.error) {
+            case 1:
+              // IF NOT LOGGED IN, NOTIFY AND REFRESH AFTER
+              $toastContent = $('<span style="color: #FFB4BA">You are not logged in</span>');
+              Materialize.toast($toastContent, 2000);
+              setTimeout(()=> {location.reload(false);}, 2000);
+              break;
+            case 2:
+              $toastContent = $('<span style="color: #FFB4BA">Please write something</span>');
+              Materialize.toast($toastContent, 2000);
+              break;
+            default:
+              $toastContent = $('<span style="color: #FFB4BA">Something Broke</span>');
+              Materialize.toast($toastContent, 2000);
+              break;
+          }
+        }
+      }
+    )
   }
 
   componentDidMount() {
     this.props.getStatusRequest().then(
       () => {
-        // console.log(this.props.status);
         // if not logged in
         if(!this.props.status.isLoggedIn) {
           // and notify
@@ -30,9 +73,11 @@ class ReportError extends React.Component {
         </div>
         <div className="center">
           <div className="center">
-            <textarea id="error"></textarea>
+            <textarea id="error"
+            value={this.state.contents}
+            onChange={this.handleChange}></textarea>
           </div>
-          <a className="waves-effect waves-light btn grey darken-3 myButton">보내기</a>
+          <a className="waves-effect waves-light btn grey darken-3 myButton" onClick={this.handleAdd}>보내기</a>
         </div>
       </div>
     );
@@ -41,7 +86,8 @@ class ReportError extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    status: state.authentication.status
+    status: state.authentication.status,
+    addStatus: state.error.add
   };
 };
 
@@ -50,8 +96,8 @@ const mapDispatchToProps = (dispatch) => {
     getStatusRequest: () => {
       return dispatch(getStatusRequest());
     },
-    logoutRequest: () => {
-      return dispatch(logoutRequest());
+    errorAddRequest: (contents) => {
+      return dispatch(errorAddRequest(contents));
     }
   };
 };
