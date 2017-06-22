@@ -2,7 +2,7 @@
 import React from 'react';
 import { DramaList } from 'components';
 import { connect } from 'react-redux';
-import { dramaListRequest } from 'actions/drama';
+import { dramaListRequest, dramaRemoveRequest } from 'actions/drama';
 
 class Home extends React.Component {
 
@@ -10,6 +10,7 @@ class Home extends React.Component {
     super(props);
     this.loadNewDrama = this.loadNewDrama.bind(this);
     this.loadOldDrama = this.loadOldDrama.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
     this.state = {
       loadingState: false
     }
@@ -93,10 +94,48 @@ class Home extends React.Component {
     });
   }
 
+  handleRemove(id, index) {
+    this.props.dramaRemoveRequest(id, index).then(() => {
+      if(this.props.removeStatus.status === 'SUCCESS') {
+        // LOAD MORE DRAMA IF THERE IS NO SCROLLBAR
+        // 1 SECOND LATER. (ANIMATION TAKES 1SEC)
+        setTimeout(() => {
+          if($("body").height() < $(window).height()) {
+            this.loadOldMemo();
+          }
+        }, 1000);
+      } else {
+        // ERROR
+        /*
+          DELETE DRAMA: DELETE /api/drama/:id
+          ERROR CODES
+            1: INVALID ID
+            2: NOT ADMIN
+            3: NO RESOURCE
+            4: PERMISSION FAILURE
+        */
+        let errorMessage = [
+          'Something broke',
+          'Please login as Admin',
+          'That drama does not exist',
+          'You do not have permission'
+        ];
+
+        // NOTIFY ERROR
+        let $toastContent = $('<span style="color: #FFB4BA">' + errorMessage[this.props.removeStatus.error - 1] + '</span>');
+
+        // IF NOT LOGGED IN, REFRESH THE PAGE
+        if(this.props.removeStatus.error === 2) {
+          setTimeout(() => {location.reload(false)}, 2000);
+        }
+      }
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
-        <DramaList data={this.props.dramaData} currentUser={this.props.currentUser}/>
+        <DramaList data={this.props.dramaData} currentUser={this.props.currentUser} onRemove={this.handleRemove}/>
       </div>
     );
   }
@@ -109,7 +148,8 @@ const mapStateToProps = (state) => {
     currentUser: state.authentication.status.currentUser,
     dramaData: state.drama.list.data,
     listStatus: state.drama.list.status,
-    isLast: state.drama.list.isLast
+    isLast: state.drama.list.isLast,
+    removeStatus: state.drama.remove
   };
 };
 
@@ -117,6 +157,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dramaListRequest: (isInitial, listType, id, title) => {
       return dispatch(dramaListRequest(isInitial, listType, id, title));
+    },
+    dramaRemoveRequest: (id, index) => {
+      return dispatch(dramaRemoveRequest(id, index));
     }
   };
 };

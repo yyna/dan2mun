@@ -4,7 +4,10 @@ import {
   DRAMA_ADD_FAILURE,
   DRAMA_LIST,
   DRAMA_LIST_SUCCESS,
-  DRAMA_LIST_FAILURE
+  DRAMA_LIST_FAILURE,
+  DRAMA_REMOVE,
+  DRAMA_REMOVE_SUCCESS,
+  DRAMA_REMOVE_FAILURE
 } from './ActionTypes';
 
 import axios from 'axios';
@@ -99,4 +102,36 @@ export function dramaListFailure() {
   return {
     type: DRAMA_LIST_FAILURE
   };
+}
+
+/* DRAMA REMOVE */
+export function dramaRemoveRequest(id, index) {
+  return (dispatch) => {
+    return axios.delete('/api/drama/' + id)
+    .then((response) => {
+      dispatch(dramaRemoveSuccess(index));
+    }).catch((error) => {
+      dispatch(dramaRemoveFailure(error.response.data.code));
+    });
+  };
+}
+
+export function dramaRemove() {
+  return {
+    type: DRAMA_REMOVE
+  };
+}
+
+export function dramaRemoveSuccess(index) {
+  return {
+    type: DRAMA_REMOVE_SUCCESS,
+    index
+  };
+}
+
+export function dramaRemoveFailure(error) {
+  return {
+    type: DRAMA_REMOVE_FAILURE,
+    error
+  }
 }

@@ -10,6 +10,10 @@ const initialState = {
     status: 'INIT',
     data: [],
     isLast: false
+  },
+  remove: {
+    status: 'INIT',
+    error: -1
   }
 };
 
@@ -79,6 +83,31 @@ export default function drama(state, action) {
           status: { $set: 'FAILURE' }
         }
       })
+    /* DRAMA REMOVE */
+    case types.DRAMA_REMOVE:
+      return update(state, {
+        remove: {
+          status: { $set: 'WAITING' },
+          error: { $set: '-1' }
+        }
+      });
+    case types.DRAMA_REMOVE_SUCCESS:
+      return update(state, {
+        remove: {
+          status: { $set: 'SUCCESS' }
+        },
+        list: {
+          data: { $splice: [[action.index, 1]] }
+        }
+      });
+    case types.DRAMA_REMOVE_FAILURE:
+      return update(state, {
+        remove: {
+          status: { $set: 'FAILURE' },
+          error: { $set: action.error }
+        }
+      });
+
     default:
       return state;
   }

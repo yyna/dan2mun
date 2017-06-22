@@ -8,6 +8,7 @@ class DramaList extends React.Component {
         return (<Drama
           data={drama}
           key={drama._id}
+          onRemove={this.props.onRemove}
           />);
       })
     }
@@ -21,12 +22,16 @@ class DramaList extends React.Component {
 
 DramaList.propTypes = {
   data: React.PropTypes.array,
-  currentUser: React.PropTypes.string
+  currentUser: React.PropTypes.string,
+  onRemove: React.PropTypes.func
 }
 
 DramaList.defaultProps = {
   data: [],
-  currentUser: ''
+  currentUser: '',
+  onRemove: (id, index) => {
+    console.log('remove function nont defined');
+  }
 };
 
 export default DramaList;

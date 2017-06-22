@@ -9,6 +9,7 @@ class Drama extends React.Component {
     this.state = {
       isAdmin: false
     };
+    this.handleRemove = this.handleRemove.bind(this);
   }
 
   componentDidUpdate() {
@@ -35,6 +36,12 @@ class Drama extends React.Component {
     )
   }
 
+  handleRemove() {
+    let id = this.props.data._id;
+    let index = this.props.index;
+    this.props.onRemove(id, index);
+  }
+
   render() {
     const {data} = this.props;
 
@@ -46,7 +53,7 @@ class Drama extends React.Component {
           <i className="material-icons icon-button">more_vert</i>
         </a>
         <ul id={`dropdown-${data._id}`} className='dropdown-content'>
-          <li><a>삭제</a></li>
+          <li><a onClick={this.handleRemove}>삭제</a></li>
         </ul>
       </div>
     );
@@ -90,7 +97,8 @@ class Drama extends React.Component {
 
 Drama.propTypes = {
   data: React.PropTypes.object,
-  isAdmin: React.PropTypes.bool
+  isAdmin: React.PropTypes.bool,
+  onRemove: React.PropTypes.func
 };
 
 Drama.defaultProps = {
@@ -104,6 +112,9 @@ Drama.defaultProps = {
     king: '통치자',
     events: '관련 사건',
     image: 'https://image-proxy.namuwikiusercontent.com/r/http%3A%2F%2Fimgmovie.naver.com%2Fmdi%2Fmi%2F0398%2F39894_P01_125635.jpg'
+  },
+  onRemove: (id, index) => {
+    console.error('remove function not defined');
   }
 }
 
