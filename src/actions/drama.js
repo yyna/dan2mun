@@ -65,7 +65,7 @@ export function dramaListRequest(isInitial, listType, id, era) {
 
     let url = '/api/drama';
 
-    if(typeof username==="undefined") {
+    if(typeof era==="undefined") {
       // username not given, load public drama
       url = isInitial ? url : `${url}/${listType}/${id}`;
       // or url + '/' + listType + '/' +  id

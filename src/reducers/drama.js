@@ -37,10 +37,11 @@ export default function drama(state, action) {
         }
       });
     case types.DRAMA_ADD_FAILURE:
-      console.log(action.error);
       return update(state, {
-        status: { $set: 'FAILURE'},
-        error: { $set: action.error }
+        add: {
+          status: { $set: 'FAILURE'},
+          error: { $set: action.error }
+        }
       });
     /* DRAMA LIST */
     case types.DRAMA_LIST:

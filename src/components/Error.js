@@ -13,6 +13,22 @@ class Error extends React.Component {
     this.props.onRemove(id, index);
   }
 
+  componentDidUpdate() {
+    // WHEN COMPONENT UPDATES, INITIALIZE DROPDOWN
+    // (TRIGGERED WHEN LOGGED IN)
+    $('#dropdown-button-'+this.props.data._id).dropdown({
+        belowOrigin: true // Displays dropdown below the button
+    });
+  }
+
+  componentDidMount() {
+    // WHEN COMPONENT MOUNTS, INITIALIZE DROPDOWN
+    // (TRIGGERED WHEN REFRESHED)
+    $('#dropdown-button-'+this.props.data._id).dropdown({
+      belowOrigin: true // Displays dropdown below the button
+    });
+  }
+
   render() {
     const {data} = this.props;
 

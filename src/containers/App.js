@@ -1,7 +1,8 @@
 import React from 'react';
-import { Header, Author, Search } from 'components';
+import { Header, Author } from 'components';
 import { connect } from 'react-redux';
 import { getStatusRequest, logoutRequest } from 'actions/authentication';
+import {browserHistory} from "react-router";
 
 class App extends React.Component {
 
@@ -68,6 +69,8 @@ class App extends React.Component {
         document.cookie = 'key=' + btoa(JSON.stringify(loginData));
       }
     );
+    window.location.reload();
+    browserHistory.push("/");
   }
 
   render() {
@@ -78,8 +81,6 @@ class App extends React.Component {
     return (
       <div>
         { isAuth ? undefined : <Header isLoggedIn={this.props.status.isLoggedIn} isAdmin={this.props.status.isAdmin} onLogout={this.handleLogout}/> }
-        { isAuth ? undefined : <Search/>}
-        <br/>
         { this.props.children }
         <br/>
         <Author/>

@@ -1,6 +1,6 @@
 // src/containers/Home.js
 import React from 'react';
-import { DramaList } from 'components';
+import { DramaList, Search } from 'components';
 import { connect } from 'react-redux';
 import { dramaListRequest, dramaRemoveRequest } from 'actions/drama';
 
@@ -164,7 +164,7 @@ class Home extends React.Component {
       <div>
         <div className="container wall-info">
           <div className="card wall-info blue lighten-2 white-text">
-            <div className="card-content">
+            <div className="card-content grey darken-3">
               {this.props.era}
             </div>
           </div>
@@ -175,9 +175,12 @@ class Home extends React.Component {
 
 
     return (
-      <div className="wrapper">
-        { typeof this.props.era !== "undefined" ? wallHeader : undefined }
-        <DramaList data={this.props.dramaData} currentUser={this.props.currentUser} onRemove={this.handleRemove}/>
+      <div>
+        <Search/>
+        <div className="wrapper">
+          { typeof this.props.era !== "undefined" ? wallHeader : undefined }
+          <DramaList data={this.props.dramaData} currentUser={this.props.currentUser} onRemove={this.handleRemove}/>
+        </div>
       </div>
     );
   }

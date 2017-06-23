@@ -1,4 +1,5 @@
 import React from 'react';
+import {browserHistory} from "react-router";
 
 class Search extends React.Component {
 
@@ -7,6 +8,8 @@ class Search extends React.Component {
     this.state = {
       keyword: ''
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   handleChange(e) {
@@ -15,8 +18,8 @@ class Search extends React.Component {
     });
   }
 
-  handleKeyPress(e) {
-    // IF PRESSED ENTER, TRIGGER TO NAVIGATE TO THE FIRST USER SHOWN
+  handleKeyDown(e) {
+    // IF PRESSED ENTER,
     if(e.keyCode === 13) {
       browserHistory.push('/result/' + this.state.keyword);
     }
@@ -37,6 +40,7 @@ class Search extends React.Component {
                 value={this.state.keyword}
                 onChange={this.handleChange}
                 placeholder="시대를 입력해주세요."
+                onKeyDown={this.handleKeyDown}
                 required/>
               <label className="label-icon" htmlFor="search"><i className="material-icons">search</i></label>
               <i className="material-icons">close</i>

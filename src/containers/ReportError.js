@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getStatusRequest, logoutRequest } from 'actions/authentication';
 import { errorAddRequest } from 'actions/error';
+import {browserHistory} from "react-router";
 
 class ReportError extends React.Component {
 
@@ -60,6 +61,7 @@ class ReportError extends React.Component {
           // and notify
           let $toastContent = $('<span style="color: #FFB4BA">로그인 후 사용해주세요.</span>');
           Materialize.toast($toastContent, 4000);
+          browserHistory.push('/login');
         }
       }
     )

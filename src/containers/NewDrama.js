@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { dramaAddRequest } from 'actions/drama';
+import ReactDOM from 'react-dom';
+import {browserHistory} from "react-router";
 
 class NewDrama extends React.Component {
 
@@ -18,12 +20,18 @@ class NewDrama extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   handleChange(e) {
     let nextState = {};
     nextState[e.target.name] = e.target.value;
     this.setState(nextState);
+  }
+
+  handleSelectChange(event) {
+    event.preventDefault();
+    this.setState({era: event.target.value});
   }
 
   /* ADD DRAMA */
@@ -38,16 +46,18 @@ class NewDrama extends React.Component {
         } else {
           /*
             ERROR CODES
-              1: NOT ADMIN
+              1: NOT LOGGED IN
               2: EMPTY CONTENTS
+              3: NOT ADMIN
+              4: DRAMA EXISTS
           */
           let $toastContent;
-          switch(this.props.error) {
+          switch(this.props.errorCode) {
             case 1:
               // IF NOT ADMIN
-              $toastContent = $('<span style="color: #FFB4BA">You are not logged in as Admin</span>');
+              $toastContent = $('<span style="color: #FFB4BA">You are not logged</span>');
               Materialize.toast($toastContent, 2000);
-              setTimeout(() => {location.reload(false);}, 2000);
+              browserHistory.push('/login');
               break;
             case 2:
               $toastContent = $('<span style="color: #FFB4BA">Please write something</span>');
@@ -55,6 +65,11 @@ class NewDrama extends React.Component {
               break;
             case 3:
               $toastContent = $('<span style="color: #FFB4BA">Plase login as Admin</span>');
+              Materialize.toast($toastContent, 2000);
+              browserHistory.push('/login');
+              break;
+            case 4:
+              $toastContent = $('<span style="color: #FFB4BA">Drama/Movie already exists</span>');
               Materialize.toast($toastContent, 2000);
               break;
             default:
@@ -67,7 +82,19 @@ class NewDrama extends React.Component {
     );
   }
 
+  componentDidMount() {
+    // Use Materialize custom select input
+    $(document).ready(function() {
+      $('select').material_select();
+    });
+    $(ReactDOM.findDOMNode(this.refs.testSelect)).on('change',this.handleSelectChange.bind(this));
+  }
+
   render() {
+    $(document).ready(function() {
+      $('#select').material_select();
+    });
+
     return (
       <div>
         <div className="container write">
@@ -77,7 +104,25 @@ class NewDrama extends React.Component {
               <input type="text" placeholder="감독" name="director" onChange={this.handleChange}/>
               <input type="text" placeholder="배우1, 배우2" name="actors" onChange={this.handleChange}/>
               <input type="text" placeholder="장르" name="genre" onChange={this.handleChange}/>
-              <input type="text" placeholder="시대" name="era" onChange={this.handleChange}/>
+              <div className="input-field col s12">
+                <select name="era" onChange={this.handleSelectChange} ref="testSelect">
+                  <option value="" defaultValue>시대를 선택해주세요.</option>
+                  <option value="고조선">고조선</option>
+                  <option value="삼한">삼한</option>
+                  <option value="원삼국">원삼국</option>
+                  <option value="삼국">삼국</option>
+                  <option value="남북국">남북국</option>
+                  <option value="후삼국">후삼국</option>
+                  <option value="조선">조선</option>
+                  <option value="대한제국">대한제국</option>
+                  <option value="고려">고려</option>
+                  <option value="조선">조선</option>
+                  <option value="일제강점기">일제강점기</option>
+                  <option value="대한민국 임시정부">대한민국 임시정부</option>
+                  <option value="군정기">군정기</option>
+                  <option value="대한민국">대한민국</option>
+                </select>
+              </div>
               <input type="text" placeholder="통치자" name="king" onChange={this.handleChange}/>
               <input type="text" placeholder="관련사건" name="events" onChange={this.handleChange}/>
               <input type="text" placeholder="이미지" name="image" onChange={this.handleChange}/>
@@ -106,7 +151,8 @@ class NewDrama extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    addStatus: state.drama.add.status
+    addStatus: state.drama.add.status,
+    errorCode: state.drama.add.error
   };
 }
 
