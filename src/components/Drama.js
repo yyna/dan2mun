@@ -63,7 +63,7 @@ class Drama extends React.Component {
       <div className="card">
         <div className="info">
           <a className="username">{data.title}</a>
-          { this.state.isAdmin ? dropDownMenu : undefined }
+          { this.props.status.currentUser === 'admin' ? dropDownMenu : undefined }
         </div>
         <div className="card-content">
           <table className="drama-table">
