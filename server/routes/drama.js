@@ -138,7 +138,7 @@ router.delete('/:id', (req, res) => {
 // Get drama list
 router.get('/', (req, res) => {
   Drama.find()
-  .sort({"_id": -1})
+  .sort({_id: -1})
   .limit(6)
   .exec((err, dramas) => {
     if(err) throw err;
@@ -197,7 +197,7 @@ router.get('/:listType/:id', (req, res) => {
 */
 router.get('/:era', (req, res) => {
   Drama.find({era: req.params.era})
-  .sort({'_id': -1})
+  .sort({_id: -1})
   .limit(6)
   .exec((err, dramas) => {
     if(err) throw err;
@@ -206,7 +206,7 @@ router.get('/:era', (req, res) => {
 });
 
 /*
-  READ ADDITIONAL (OLD/NEW) DRAMA OF A USER: GET /api/drama/:director/:listType/:id
+  READ ADDITIONAL (OLD/NEW) DRAMA OF A USER: GET /api/drama/:era/:listType/:id
 */
 router.get('/:era/:listType/:id', (req, res) => {
   let listType = req.params.listType;
@@ -221,7 +221,7 @@ router.get('/:era/:listType/:id', (req, res) => {
   }
 
   // CHECK DRAMA ID VALIDITY
-  if(mongoose.Types.ObjectId.isValid(id)) {
+  if(!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({
       error: "INVALID ID",
       code: 2
@@ -232,7 +232,7 @@ router.get('/:era/:listType/:id', (req, res) => {
 
   if(listType === 'new') {
     // GET NEWER DRAMA
-    Drama.find({era: req.params.era, id: { $gt: objId }})
+    Drama.find({era: req.params.era, _id: { $gt: objId }})
     .sort({_id: -1})
     .limit(6)
     .exec((err, dramas) => {
@@ -241,7 +241,7 @@ router.get('/:era/:listType/:id', (req, res) => {
     });
   } else {
     // GET OLDER DRAMA
-    Drama.find({era: req.params.era, id: {$lt: objId }})
+    Drama.find({era: req.params.era, _id: {$lt: objId }})
     .sort({_id: -1})
     .limit(6)
     .exec((err, dramas) => {

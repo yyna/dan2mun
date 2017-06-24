@@ -13,7 +13,8 @@ class Home extends React.Component {
     this.handleRemove = this.handleRemove.bind(this);
     this.state = {
       loadingState: false,
-      initiallyLoaded: false
+      initiallyLoaded: false,
+      intervalId: 0
     };
   }
 
@@ -150,6 +151,18 @@ class Home extends React.Component {
     }
   }
 
+  scrollStep() {
+    if (window.pageYOffset === 0) {
+      clearInterval(this.state.intervalId);
+    }
+    window.scroll(0, window.pageYOffset - 50);
+  }
+
+  scrollToTop() {
+    let intervalId = setInterval(this.scrollStep.bind(this), 16.66);
+    this.setState({ intervalId: intervalId });
+  }
+
   render() {
 
     const emptyView = (
@@ -159,6 +172,7 @@ class Home extends React.Component {
         </div>
       </div>
     );
+
 
     const wallHeader = (
       <div>
@@ -173,13 +187,17 @@ class Home extends React.Component {
       </div>
     );
 
-
     return (
       <div>
         <Search/>
         <div className="wrapper">
           { typeof this.props.era !== "undefined" ? wallHeader : undefined }
           <DramaList data={this.props.dramaData} currentUser={this.props.currentUser} onRemove={this.handleRemove}/>
+        </div>
+        <div className="fixed-action-btn">
+          <a className="btn-floating btn-large grey darken-3 scroll" onClick={ () => { this.scrollToTop(); }}>
+            <i className="large material-icons">navigation</i>
+          </a>
         </div>
       </div>
     );

@@ -13,7 +13,7 @@ class NewDrama extends React.Component {
       director: "",
       actors: "",
       genre: "",
-      era: "",
+      era: "단군조선",
       king: "",
       events: "",
       image: ""
@@ -106,21 +106,43 @@ class NewDrama extends React.Component {
               <input type="text" placeholder="장르" name="genre" onChange={this.handleChange}/>
               <div className="input-field col s12">
                 <select name="era" onChange={this.handleSelectChange} ref="testSelect">
-                  <option value="" defaultValue>시대를 선택해주세요.</option>
-                  <option value="고조선">고조선</option>
-                  <option value="삼한">삼한</option>
-                  <option value="원삼국">원삼국</option>
-                  <option value="삼국">삼국</option>
-                  <option value="남북국">남북국</option>
-                  <option value="후삼국">후삼국</option>
-                  <option value="조선">조선</option>
-                  <option value="대한제국">대한제국</option>
-                  <option value="고려">고려</option>
-                  <option value="조선">조선</option>
-                  <option value="일제강점기">일제강점기</option>
-                  <option value="대한민국 임시정부">대한민국 임시정부</option>
-                  <option value="군정기">군정기</option>
-                  <option value="대한민국">대한민국</option>
+                  <optgroup label="고조선 시대">
+                    <option value="단군조선">단군조선</option>
+                    <option value="위만조선">위만조선</option>
+                  </optgroup>
+                  <optgroup label="원삼국 시대">
+                    <option value="부여">부여</option>
+                    <option value="옥저.동예">옥저.동예</option>
+                    <option value="삼한">삼한(마한,진한,변한)</option>
+                  </optgroup>
+                  <optgroup label="삼국 시대">
+                    <option value="고구려">고구려</option>
+                    <option value="백제">백제</option>
+                    <option value="신라">신라</option>
+                    <option value="가야">가야</option>
+                  </optgroup>
+                  <optgroup label="남북국 시대">
+                    <option value="통일신라">통일신라</option>
+                    <option value="발해">발해</option>
+                  </optgroup>
+                  <optgroup label="후삼국 시대">
+                    <option value="신라">신라</option>
+                    <option value="후백제">후백제</option>
+                    <option value="태봉">태봉(후고구려)</option>
+                  </optgroup>
+                  <optgroup label="통일 왕조 시대">
+                    <option value="고려">고려</option>
+                    <option value="조선">조선</option>
+                    <option value="대한제국">대한제국</option>
+                  </optgroup>
+                  <optgroup label="식민지 시대">
+                    <option value="일제강점기">일제강점기</option>
+                    <option value="대한민국 임시정부">대한민국 임시정부</option>
+                  </optgroup>
+                  <optgroup label="현대">
+                    <option value="군정기">군정기</option>
+                    <option value="대한민국">대한민국</option>
+                  </optgroup>
                 </select>
               </div>
               <input type="text" placeholder="통치자" name="king" onChange={this.handleChange}/>
