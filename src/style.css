@@ -207,11 +207,11 @@ td.table-label {
 }
 
 img.poster{
-  height: 250px;
+  width: 90%;
 }
 
 .image-cell {
-  width: 200px;
+  width: 40%;
 }
 
 td {

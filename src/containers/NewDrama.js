@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { dramaAddRequest } from 'actions/drama';
 import ReactDOM from 'react-dom';
 import {browserHistory} from "react-router";
+const FileUpload = require('react-fileupload');
 
 class NewDrama extends React.Component {
 
@@ -94,6 +95,13 @@ class NewDrama extends React.Component {
     $(document).ready(function() {
       $('#select').material_select();
     });
+
+    const options={
+      baseUrl:'http://127.0.0.1',
+      param:{
+        fid:0
+      }
+    }
 
     return (
       <div>
