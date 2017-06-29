@@ -71,8 +71,7 @@ class Drama extends React.Component {
             <tbody>
               <tr><td rowSpan="6" className="image-cell"><img src={data.image} className="poster"/></td><td className="table-label">감독</td><td>{data.director}</td></tr>
               <tr><td className="table-label">출연진</td><td id={data._id}>{data.actors}</td></tr>
-              <tr><td className="table-label">장르</td><td>{data.genre}</td></tr>
-              <tr><td className="table-label">시대</td><td><Link to={`/result/${data.era}`}>{data.era}</Link></td></tr>
+              <tr><td className="table-label">배경국가</td><td><Link to={`/result/${data.era}`}>{data.era}</Link></td></tr>
               <tr><td className="table-label">통치자</td><td>{data.king}</td></tr>
               <tr><td className="table-label">관련 사건</td><td>{data.events}</td></tr>
             </tbody>

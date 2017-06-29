@@ -7,7 +7,13 @@ import {
   DRAMA_LIST_FAILURE,
   DRAMA_REMOVE,
   DRAMA_REMOVE_SUCCESS,
-  DRAMA_REMOVE_FAILURE
+  DRAMA_REMOVE_FAILURE,
+  NEW_DRAMA_LIST,
+  NEW_DRAMA_LIST_SUCCESS,
+  NEW_DRAMA_LIST_FAILURE,
+  DRAMA_COUNT,
+  DRAMA_COUNT_SUCCESS,
+  DRAMA_COUNT_FAILURE
 } from './ActionTypes';
 
 import axios from 'axios';
@@ -17,16 +23,16 @@ import axios from 'axios';
 ==============================================================================*/
 
 /* DRAMA ADD */
-export function dramaAddRequest(title, director, actors, genre, era, king, events, image) {
+export function dramaAddRequest(title, director, actors, era, bcac, when, king, events, image) {
   return (dispatch) => {
     // inform drama api is starting
     dispatch(dramaAdd());
 
-    return axios.post('/api/drama/', {title, director, actors, genre, era, king, events, image})
+    return axios.post('/api/drama/', {title, director, actors, era, bcac, when, king, events, image})
     .then((response) => {
       dispatch(dramaAddSuccess());
     }).catch((error) => {
-      dispatch(dramaAddFailure(error.response.data.code));
+      dispatch(dramaAddFailure(error.response));
     });
   };
 }
@@ -134,4 +140,71 @@ export function dramaRemoveFailure(error) {
     type: DRAMA_REMOVE_FAILURE,
     error
   }
+}
+
+
+/* Newly Added Drama List */
+export function newlyAddedDramaListRequest() {
+  return (dispatch) => {
+    dispatch(newlyAddedDramaList());
+
+    return axios.get('/api/drama/new')
+    .then((response) => {
+      dispatch(newlyAddedDramaListSuccess(response.data));
+    }).catch((error) => {
+      dispatch(newlyAddedDramaListFailure(error.response.data.code));
+    })
+  }
+}
+
+export function newlyAddedDramaList() {
+  return {
+    type: NEW_DRAMA_LIST
+  };
+}
+
+export function newlyAddedDramaListSuccess(data) {
+  return {
+    type: NEW_DRAMA_LIST_SUCCESS,
+    data
+  };
+}
+
+export function newlyAddedDramaListFailure(error) {
+  return {
+    type: NEW_DRAMA_LIST_FAILURE
+  };
+}
+
+/* DRAMA COUNT */
+export function dramaCountRequest() {
+  return (dispatch) => {
+    dispatch(dramaCount());
+
+    return axios.get('/api/drama/count')
+    .then((response) => {
+      dispatch(dramaCountSuccess(response.data));
+    }).catch((error) => {
+      dispatch(dramaCountFailure(error.response.data.code));
+    })
+  }
+}
+
+export function dramaCount() {
+  return {
+    type: DRAMA_COUNT
+  };
+}
+
+export function dramaCountSuccess(data) {
+  return {
+    type: DRAMA_COUNT_SUCCESS,
+    data
+  };
+}
+
+export function dramaCountFailure(error) {
+  return {
+    type: DRAMA_COUNT_FAILURE
+  };
 }

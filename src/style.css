@@ -7,7 +7,7 @@ body {
 }
 
 /* Header */
-span#two {
+span.two {
   color: #ff6666;
 }
 
@@ -121,12 +121,6 @@ textarea#error {
 	width: 500px;
 	height: 300px;
 	resize: none;
-}
-
-/* Author */
-.author {
-  /*margin-top: 50px;*/
-  font-size: 10px;
 }
 
 /* Drama */
@@ -266,4 +260,24 @@ td {
 .wall-info {
     font-size: 30px;
     text-align: center;
+}
+
+/* Author */
+#yyna_image {
+  width: 60px;
+}
+
+.logo {
+  width: 40px;
+  margin: 3px;
+}
+
+/* Introduction */
+.carousel-item {
+  height: 200px;
+  width: 200px;
+}
+
+.carousel {
+  height: 300px;
 }

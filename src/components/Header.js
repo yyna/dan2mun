@@ -4,6 +4,13 @@ import { Link } from 'react-router';
 class Header extends React.Component {
   render() {
 
+    const listButton = (
+      <li>
+        <Link to="/list">
+          영화/드라마 목록
+        </Link>
+      </li>
+    );
     const loginButton = (
       <li>
         <Link to="/login">
@@ -38,10 +45,11 @@ class Header extends React.Component {
     return (
       <nav>
         <div className="nav-wrapper grey darken-3 myNav">
-          <Link to="/" className="brand-logo left">단<span id="two">2</span>문<span id="subtitle"> : 단군부터 문재인까지</span></Link>
+          <Link to="/" className="brand-logo left">단<span className="two">2</span>문<span id="subtitle"> : 단군부터 문재인까지</span></Link>
 
           <div className="right">
             <ul>
+              { listButton }
               { (this.props.isAdmin && this.props.isLoggedIn) ? adminButton : errorReportButton }
               { this.props.isLoggedIn ? logoutButton : loginButton }
             </ul>

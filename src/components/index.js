@@ -6,5 +6,8 @@ import Drama from './Drama';
 import DramaList from './DramaList';
 import Error from './Error';
 import ErrorList from './ErrorList';
+import Introduction from './Introduction';
+import Statistics from './Statistics';
+import NewlyAddedDramaList from './NewlyAddedDramaList';
 
-export { Header, Authentication, Author, Search, Drama, DramaList, Error, ErrorList };
+export { Header, Authentication, Author, Search, Drama, DramaList, Error, ErrorList, Introduction, Statistics, NewlyAddedDramaList };

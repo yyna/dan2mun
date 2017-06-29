@@ -14,6 +14,14 @@ const initialState = {
   remove: {
     status: 'INIT',
     error: -1
+  },
+  new: {
+    status: 'INIT',
+    data: []
+  },
+  count: {
+    status: 'INIT',
+    data: []
   }
 };
 
@@ -108,7 +116,46 @@ export default function drama(state, action) {
           error: { $set: action.error }
         }
       });
-
+    /* NEWLY ADDED DRAMA LIST */
+    case types.NEW_DRAMA_LIST:
+      return update(state, {
+        new: {
+          status: { $set: 'WAITING' }
+        }
+      });
+    case types.NEW_DRAMA_LIST_SUCCESS:
+      return update(state, {
+        new: {
+          status: { $set: 'SUCCESS' },
+          data: { $set: action.data }
+        }
+      });
+    case types.NEW_DRAMA_LIST_FAILURE:
+      return update(state, {
+        new: {
+          status: { $set: 'FAILURE'}
+        }
+      });
+    /* DRAMA COUNT */
+    case types.DRAMA_COUNT:
+      return update(state, {
+        count: {
+          status: { $set: 'WAITING' }
+        }
+      });
+    case types.DRAMA_COUNT_SUCCESS:
+      return update(state, {
+        count: {
+          status: { $set: 'SUCCESS' },
+          data: { $set: action.data }
+        }
+      });
+    case types.DRAMA_COUNT_FAILURE:
+      return update(state, {
+        count: {
+          status: { $set: 'FAILURE' }
+        }
+      });
     default:
       return state;
   }

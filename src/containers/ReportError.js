@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getStatusRequest, logoutRequest } from 'actions/authentication';
 import { errorAddRequest } from 'actions/error';
-import {browserHistory} from "react-router";
+import { browserHistory } from "react-router";
 
 class ReportError extends React.Component {
 

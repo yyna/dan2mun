@@ -13,11 +13,12 @@ class NewDrama extends React.Component {
       title: "",
       director: "",
       actors: "",
-      genre: "",
-      era: "단군조선",
+      era: [],
       king: "",
       events: "",
-      image: ""
+      image: "",
+      bcac: "AC",
+      when: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
@@ -32,17 +33,40 @@ class NewDrama extends React.Component {
 
   handleSelectChange(event) {
     event.preventDefault();
-    this.setState({era: event.target.value});
+    this.setState({
+      era: [...event.target.options].filter(o => o.selected).map(o => o.value)
+    });
   }
 
   /* ADD DRAMA */
   handleAdd() {
-    return this.props.dramaAddRequest(this.state.title, this.state.director, this.state.actors, this.state.genre, this.state.era, this.state.king, this.state.events, this.state.image).then(
+    return this.props.dramaAddRequest(this.state.title, this.state.director, this.state.actors, this.state.era, this.state.bcac, this.state.when, this.state.king, this.state.events, this.state.image).then(
       () => {
         if (this.props.addStatus === "SUCCESS") {
           // TRIGGER LOAD NEW DRAMA
           // TO BE IMPLEMENTED
           $('input[type=text]').val('');
+          $('input[type=number').val('');
+          $("select").find('option:selected').removeAttr("selected");
+          $('#ac').prop("checked", true);
+
+          // Re-initialize select
+          $('select').material_select('destroy');
+          $(document).ready(function() {
+            $('select').material_select();
+          });
+          this.setState({
+            title: "",
+            director: "",
+            actors: "",
+            era: [],
+            king: "",
+            events: "",
+            image: "",
+            bcac: "AC",
+            when: ""
+          });
+
           Materialize.toast('Success!', 2000);
         } else {
           /*
@@ -96,13 +120,6 @@ class NewDrama extends React.Component {
       $('#select').material_select();
     });
 
-    const options={
-      baseUrl:'http://127.0.0.1',
-      param:{
-        fid:0
-      }
-    }
-
     return (
       <div>
         <div className="container write">
@@ -111,48 +128,35 @@ class NewDrama extends React.Component {
               <input type="text" placeholder="제목" name="title" onChange={this.handleChange}/>
               <input type="text" placeholder="감독" name="director" onChange={this.handleChange}/>
               <input type="text" placeholder="배우1, 배우2" name="actors" onChange={this.handleChange}/>
-              <input type="text" placeholder="장르" name="genre" onChange={this.handleChange}/>
               <div className="input-field col s12">
-                <select name="era" onChange={this.handleSelectChange} ref="testSelect">
-                  <optgroup label="고조선 시대">
+                <select name="era" onChange={this.handleSelectChange} ref="testSelect" multiple>
+                    <option defaultValue disabled>배경 국가를 선택해주세요. (복수 가능)</option>
                     <option value="단군조선">단군조선</option>
                     <option value="위만조선">위만조선</option>
-                  </optgroup>
-                  <optgroup label="원삼국 시대">
                     <option value="부여">부여</option>
                     <option value="옥저.동예">옥저.동예</option>
                     <option value="삼한">삼한(마한,진한,변한)</option>
-                  </optgroup>
-                  <optgroup label="삼국 시대">
                     <option value="고구려">고구려</option>
                     <option value="백제">백제</option>
                     <option value="신라">신라</option>
                     <option value="가야">가야</option>
-                  </optgroup>
-                  <optgroup label="남북국 시대">
                     <option value="통일신라">통일신라</option>
                     <option value="발해">발해</option>
-                  </optgroup>
-                  <optgroup label="후삼국 시대">
-                    <option value="신라">신라</option>
+                    <option value="신라(후삼국)">신라(후삼국)</option>
                     <option value="후백제">후백제</option>
                     <option value="태봉">태봉(후고구려)</option>
-                  </optgroup>
-                  <optgroup label="통일 왕조 시대">
                     <option value="고려">고려</option>
                     <option value="조선">조선</option>
                     <option value="대한제국">대한제국</option>
-                  </optgroup>
-                  <optgroup label="식민지 시대">
                     <option value="일제강점기">일제강점기</option>
                     <option value="대한민국 임시정부">대한민국 임시정부</option>
-                  </optgroup>
-                  <optgroup label="현대">
                     <option value="군정기">군정기</option>
                     <option value="대한민국">대한민국</option>
-                  </optgroup>
                 </select>
               </div>
+              <input type="radio" name="bcac" id="bc" onChange={this.handleChange} value="BC"/><label htmlFor="bc">BC</label><br/>
+              <input type="radio" name="bcac" id="ac" onChange={this.handleChange} value="AC" defaultChecked/><label htmlFor="ac">AC</label>
+              <input type="number" placeholder="yyyyddmm" name="when" onChange={this.handleChange}/>
               <input type="text" placeholder="통치자" name="king" onChange={this.handleChange}/>
               <input type="text" placeholder="관련사건" name="events" onChange={this.handleChange}/>
               <input type="text" placeholder="이미지" name="image" onChange={this.handleChange}/>
@@ -188,8 +192,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    dramaAddRequest: (title, director, actors, genre, era, king, events, image) => {
-      return dispatch(dramaAddRequest(title, director, actors, genre, era, king, events, image));
+    dramaAddRequest: (title, director, actors, era, bcac, when, king, events, image) => {
+      return dispatch(dramaAddRequest(title, director, actors, era, bcac, when, king, events, image));
     }
   };
 }
